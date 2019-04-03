@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>cn.heima</groupId>
+  <artifactId>ilcbs_parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+  	<module>ilcbs_server_dao</module>
+  	<module>ilcbs_server_domain</module>
+  	<module>ilcbs_server_service</module>
+  	<module>ilcbs_server_web</module>
+  	<module>ilcbs_utils</module>
+  	<module>ilcbs_cache</module>
+  	<module>ilcbs_exception</module>
+  	<module>ilcbs_client_dao</module>
+  	<module>ilcbs_client_domain</module>
+  	<module>ilcbs_client_service</module>
+  	<module>ilcbs_client_web</module>
+  </modules>
+</project>
