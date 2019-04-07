@@ -383,7 +383,7 @@
   </dependencies>
   
    <build>
- 	<finalName>sz06</finalName>
+ 	<finalName>heima297</finalName>
 	<pluginManagement>
 		<plugins>
 			<plugin>
