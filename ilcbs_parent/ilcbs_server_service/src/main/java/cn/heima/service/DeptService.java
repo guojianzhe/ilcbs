@@ -22,7 +22,6 @@ public interface DeptService {
 		
 		//批量新增和修改保存
 		public  void saveOrUpdateAll(Collection<Dept> entitys);
-		
 		//单条删除，按id
 		public  void deleteById( String id);
 		//批量删除
