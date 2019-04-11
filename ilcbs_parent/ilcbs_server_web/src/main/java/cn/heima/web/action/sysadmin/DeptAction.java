@@ -7,6 +7,7 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.opensymphony.xwork2.ModelDriven;
 
 import cn.heima.domain.Dept;
@@ -56,6 +57,16 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept>
 		super.push(page);
 		
 		return "list";
+	}
+	@Action(value="deptAction_toview",results= {@Result(name="toview",location="/WEB-INF/pages/sysadmin/dept/jDeptView.jsp")})
+	public String toview() {
+		
+		System.out.println(model);
+		Dept dept = deptService.get(model.getId());
+		
+		super.push(dept);
+		
+		return "toview";
 	}
 	
 	

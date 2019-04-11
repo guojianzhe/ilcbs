@@ -57,6 +57,10 @@ public class Dept implements Serializable{
 	public void setState(String state) {
 		this.state = state;
 	}
+	@Override
+	public String toString() {
+		return "Dept [id=" + id + ", deptName=" + deptName + ", parent=" + parent + ", state=" + state + "]";
+	}
 	
 	
 	
