@@ -8,17 +8,17 @@
 <body>
 <form name="icform" method="post">
       <input type="hidden" name="id" value="${id}"/>
-<div id="menubar">
-<div id="middleMenubar">
-<div id="innerMenubar">
-  <div id="navMenubar">
-<ul>
-<li id="back"><a href="#" onclick="history.go(-1);">返回</a></li>
-</ul>
-  </div>
-</div>
-</div>
-</div>
+	<div id="menubar">
+		<div id="middleMenubar">
+			<div id="innerMenubar">
+			  <div id="navMenubar">
+					<ul>
+						<li id="back"><a href="#" onclick="history.go(-1);">返回</a></li>
+					</ul>
+			  </div>
+			</div>
+		</div>
+	</div>
    
   <div class="textbox-title">
 	<img src="${ctx }/skin/default/images/icon/currency_yen.png"/>
