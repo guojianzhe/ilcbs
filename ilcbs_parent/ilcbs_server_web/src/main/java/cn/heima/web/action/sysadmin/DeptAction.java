@@ -1,11 +1,17 @@
 package cn.heima.web.action.sysadmin;
 
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.opensymphony.xwork2.ModelDriven;
@@ -67,6 +73,25 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept>
 		super.push(dept);
 		
 		return "toview";
+	}
+	@Action(value="deptAction_tocreate",results= {@Result(name="tocreate",location="/WEB-INF/pages/sysadmin/dept/jDeptCreate.jsp")})
+	public String tocreate() {
+		
+		Specification<Dept> spec = new Specification<Dept>() {
+
+			@Override
+			public Predicate toPredicate(Root<Dept> arg0, CriteriaQuery<?> arg1, CriteriaBuilder arg2) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		
+		
+		deptService.find(spec);
+		
+		
+		
+		return "tocreate";
 	}
 	
 	
