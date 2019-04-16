@@ -12,4 +12,7 @@ public interface DeptDao extends JpaRepository<Dept, String>,JpaSpecificationExe
 	
 	@Query("from Dept where deptName = ?1")
 	public List<Dept> findDeptByName(String name);
+	
+	
+	public List<Dept> findDeptByState(Integer state);
 }

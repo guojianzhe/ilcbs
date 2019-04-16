@@ -39,12 +39,21 @@ public class JpaTest {
 		
 		Dept dept = new Dept();
 		dept.setDeptName("11111");
-		dept.setState("1");
+		dept.setState(1);
 		
 		deptService.saveOrUpdate(dept);
 		System.out.println("111");
 		
 	}
 	
+	@Test
+	public void testFindDeptByState() {
+		
+		List<Dept> findDeptByState = deptDao.findDeptByState(1);
+		for (Dept dept : findDeptByState) {
+			System.out.println(dept);
+			
+		}
+	}
 	
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import cn.heima.dao.DeptDao;
 import cn.heima.domain.Dept;
 import cn.heima.service.DeptService;
+import cn.heima.utils.UtilFuns;
 @Service("deptService")
 public class DeptServiceImpl implements DeptService{
 
@@ -38,6 +39,11 @@ public class DeptServiceImpl implements DeptService{
 
 	@Override
 	public void saveOrUpdate(Dept entity) {
+		
+		if(UtilFuns.isEmpty(entity.getId())) {
+			entity.setState(1);
+		}
+		
 		deptDao.save(entity);
 		
 	}

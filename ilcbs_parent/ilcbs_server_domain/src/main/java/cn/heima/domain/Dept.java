@@ -30,7 +30,7 @@ public class Dept implements Serializable{
 	@JoinColumn(name="PARENT_ID",referencedColumnName="DEPT_ID")
 	private Dept parent;        //代表父部门对象
 	@Column(name="STATE")
-	private String state;	    //状态 0:取消  1:运营
+	private Integer state;	    //状态 0:取消  1:运营
 	
 	
 	public String getId() {
@@ -51,10 +51,11 @@ public class Dept implements Serializable{
 	public void setParent(Dept parent) {
 		this.parent = parent;
 	}
-	public String getState() {
+	
+	public Integer getState() {
 		return state;
 	}
-	public void setState(String state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 	@Override
