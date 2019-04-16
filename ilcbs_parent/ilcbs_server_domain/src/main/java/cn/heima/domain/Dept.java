@@ -1,6 +1,8 @@
 package cn.heima.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,30 +10,47 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-
-
-@Table(name="DEPT_P")
+/**
+ * @description:
+ * @author 传智.宋江
+ * @date 2017年6月6日
+ * @version 1.0
+ * 
+ * PO类规范：
+ * 1.是一个公有类
+ * 2.属性私有
+ * 3.提供属性的公有的getter与setter
+ * 4.存在一个公有的无参构造
+ * 5.不能使用final修饰
+ * 6.一般都实现java.io.Serializable接口
+ * 7.如果是基本类型，请使用它们的包装类
+ */
 @Entity
-public class Dept implements Serializable{
+@Table(name="DEPT_P")
 
-	private static final long serialVersionUID = -121173696741639636L;
-	
+public class Dept implements Serializable {
 	@Id
 	@Column(name="DEPT_ID")
-	@GeneratedValue(generator="sys-uuid")
-	@GenericGenerator(name="sys-uuid",strategy="uuid")
-	private String id;			//部门编号
-	@Column(name="DEPT_NAME")
-	private String deptName;  	//部门名称
-	@ManyToOne
-	@JoinColumn(name="PARENT_ID",referencedColumnName="DEPT_ID")
-	private Dept parent;        //代表父部门对象
-	@Column(name="STATE")
-	private Integer state;	    //状态 0:取消  1:运营
+	@GeneratedValue(generator="system-uuid")
+	@GenericGenerator(name="system-uuid",strategy="uuid")
+	private String id;//编号
 	
+	@Column(name="DEPT_NAME")
+	private String deptName;//部门名称
+	
+	@ManyToOne
+	@JoinColumn(name="PARENT_ID")
+	private Dept parent;//父部门   子部门与父部门   多对一
+	
+	@OneToMany(mappedBy="dept")
+	private Set<User> users = new HashSet<>(0);//部门与用户  一对多
+	
+	@Column(name="STATE")
+	private Integer state;//状态
 	
 	public String getId() {
 		return id;
@@ -51,16 +70,17 @@ public class Dept implements Serializable{
 	public void setParent(Dept parent) {
 		this.parent = parent;
 	}
-	
 	public Integer getState() {
 		return state;
 	}
 	public void setState(Integer state) {
 		this.state = state;
 	}
-	@Override
-	public String toString() {
-		return "Dept [id=" + id + ", deptName=" + deptName + ", parent=" + parent + ", state=" + state + "]";
+	public Set<User> getUsers() {
+		return users;
+	}
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 	
 	
