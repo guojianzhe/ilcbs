@@ -1,8 +1,11 @@
 package cn.heima.web.action.sysadmin;
 
 
+import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -22,6 +25,7 @@ import cn.heima.utils.Page;
 import cn.heima.web.action.BaseAction;
 
 @Namespace("/sysadmin")
+@Result(name="alist",type="redirectAction",location="deptAction_list")
 public class DeptAction extends BaseAction implements ModelDriven<Dept>
 {
 	
@@ -37,8 +41,6 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept>
 	public void setPage(Page page) {
 		this.page = page;
 	}
-
-	
 	
 	@Override
 	public Dept getModel() {
@@ -67,36 +69,99 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept>
 	@Action(value="deptAction_toview",results= {@Result(name="toview",location="/WEB-INF/pages/sysadmin/dept/jDeptView.jsp")})
 	public String toview() {
 		
-		System.out.println(model);
 		Dept dept = deptService.get(model.getId());
 		
 		super.push(dept);
 		
 		return "toview";
 	}
+	/**
+	 * 去新增页面
+	 * @return
+	 */
 	@Action(value="deptAction_tocreate",results= {@Result(name="tocreate",location="/WEB-INF/pages/sysadmin/dept/jDeptCreate.jsp")})
 	public String tocreate() {
 		
 		Specification<Dept> spec = new Specification<Dept>() {
 
 			@Override
-			public Predicate toPredicate(Root<Dept> arg0, CriteriaQuery<?> arg1, CriteriaBuilder arg2) {
-				// TODO Auto-generated method stub
-				return null;
+			public Predicate toPredicate(Root<Dept> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				
+				Path<Object> path = root.get("state");
+				return cb.equal(path.as(Integer.class), 1);
 			}
 		};
 		
 		
-		deptService.find(spec);
+		List<Dept> deptList = deptService.find(spec);
 		
-		
+		super.put("deptList", deptList);
 		
 		return "tocreate";
 	}
-	
-	
-	
-	
-	
+	/**
+	 * 新增部门
+	 */
+	@Action(value="deptAction_insert")
+	public String insert() {
+		
+		deptService.saveOrUpdate(model);
+		return "alist";
+	}
+	/**
+	 * 去修改页面
+	 */
+	@Action(value="deptAction_toupdate",results= {@Result(name="toupdate",location="/WEB-INF/pages/sysadmin/dept/jDeptUpdate.jsp")})
+	public String toupdate() {
+		
+		
+		Dept dept = deptService.get(model.getId());
+		super.push(dept);
+		Specification<Dept> spec = new Specification<Dept>() {
 
+			@Override
+			public Predicate toPredicate(Root<Dept> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				
+				Path<Object> path = root.get("state");
+				return cb.equal(path.as(Integer.class), 1);
+			}
+		};
+		List<Dept> deptList = deptService.find(spec);
+		
+		deptList.remove(dept);
+		super.put("deptList", deptList);
+		return "toupdate";
+	}
+	/**
+	 * 保存修改的部门
+	 */
+	
+	@Action(value="deptAction_update")
+	public String update() {
+		
+		
+		System.out.println(model);
+		Dept dept = deptService.get(model.getId());
+//		
+		dept.setDeptName(model.getDeptName());
+		dept.setParent(model.getParent());
+		
+		deptService.saveOrUpdate(dept);
+		
+		return "alist";
+	}
+	/**
+	 * 删除部门
+	 */
+	@Action(value="deptAction_delete")
+	public String delete() throws Exception{
+		
+		String[] ids = model.getId().split(", ");
+		
+		deptService.delete(ids);
+		
+		return "alist";
+	}
+	
+	
 }
