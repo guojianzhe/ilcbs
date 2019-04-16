@@ -52,6 +52,7 @@ public class JpaTest {
 		List<Dept> findDeptByState = deptDao.findDeptByState(1);
 		for (Dept dept : findDeptByState) {
 			System.out.println(dept);
+			
 		}
 	}
 	
