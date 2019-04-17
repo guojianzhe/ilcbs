@@ -31,7 +31,7 @@
 				
 			</ul>
 			<!-- 引入动态的菜单生成 -->
-			<%@include file="../leftmenu.jsp" %>
+			<%-- <%@include file="../leftmenu.jsp" %> --%>
         </div>
         </div>
     </div>

@@ -164,7 +164,6 @@ public class Module extends BaseEntity {
 	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
 	}
-<<<<<<< HEAD
 	@Override
 	public String toString() {
 		return "Module [id=" + id + ", roles=" + roles + ", parentId=" + parentId + ", parentName=" + parentName
@@ -172,8 +171,6 @@ public class Module extends BaseEntity {
 				+ cpermission + ", curl=" + curl + ", ctype=" + ctype + ", state=" + state + ", belong=" + belong
 				+ ", cwhich=" + cwhich + ", quoteNum=" + quoteNum + ", remark=" + remark + ", orderNo=" + orderNo + "]";
 	}
-=======
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
 	
 	
 }

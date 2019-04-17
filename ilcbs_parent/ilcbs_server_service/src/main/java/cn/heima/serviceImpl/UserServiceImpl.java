@@ -2,10 +2,8 @@ package cn.heima.serviceImpl;
 
 import java.util.Collection;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.UUID;
-=======
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,8 +41,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void saveOrUpdate(User entity) {
-		
-<<<<<<< HEAD
+
 		if(UtilFuns.isEmpty(entity.getId())) {
 			String uid = UUID.randomUUID().toString();
 			
@@ -52,8 +49,7 @@ public class UserServiceImpl implements UserService{
 			entity.getUserinfo().setId(uid);
 			
 		}
-=======
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
+
 		
 		
 		userDao.save(entity);

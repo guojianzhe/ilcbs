@@ -19,13 +19,11 @@ import org.springframework.data.jpa.domain.Specification;
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.opensymphony.xwork2.ModelDriven;
 
-<<<<<<< HEAD
+
 import cn.heima.domain.Dept;
 import cn.heima.domain.User;
 import cn.heima.service.DeptService;
-=======
-import cn.heima.domain.User;
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
+
 import cn.heima.service.UserService;
 import cn.heima.utils.Page;
 import cn.heima.web.action.BaseAction;
@@ -38,12 +36,10 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 	@Autowired
 	private UserService userService;
 	
-<<<<<<< HEAD
+
 	@Autowired
 	private DeptService deptService;
-=======
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
-	
+
 	private User model = new User();
 	private Page page = new Page();
 	public Page getPage() {
@@ -77,13 +73,12 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 		
 		return "list";
 	}
-<<<<<<< HEAD
+
+	
 	/**
 	 * 查看单个用户
 	 * @return
 	 */
-=======
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
 	@Action(value="userAction_toview",results= {@Result(name="toview",location="/WEB-INF/pages/sysadmin/user/jUserView.jsp")})
 	public String toview() {
 		
@@ -93,6 +88,7 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 		
 		return "toview";
 	}
+	
 	/**
 	 * 去新增页面
 	 * @return
@@ -100,22 +96,18 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 	@Action(value="userAction_tocreate",results= {@Result(name="tocreate",location="/WEB-INF/pages/sysadmin/user/jUserCreate.jsp")})
 	public String tocreate() {
 		
-<<<<<<< HEAD
-		Specification<User> userSpec = new Specification<User>() {
-			@Override
-			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-=======
-		Specification<User> spec = new Specification<User>() {
 
+		Specification<User> userSpec = new Specification<User>() {
+			
 			@Override
 			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
+
 				Path<Object> path = root.get("state");
 				return cb.equal(path.as(Integer.class), 1);
 			}
 		};
-<<<<<<< HEAD
+
 		List<User> userList = userService.find(userSpec);
 		super.put("userList", userList);
 		//deptList 该用户所在的部门
@@ -133,14 +125,10 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 		List<Dept> deptList = deptService.find(deptSpec);
 		
 		super.put("deptList", deptList);
-=======
+
 		
 		
-		List<User> userList = userService.find(spec);
-		
-		super.put("userList", userList);
-		
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
+
 		return "tocreate";
 	}
 	/**
@@ -161,32 +149,24 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 		
 		User user = userService.get(model.getId());
 		super.push(user);
-<<<<<<< HEAD
+
+
 		Specification<Dept> spec = new Specification<Dept>() {
 
 			@Override
 			public Predicate toPredicate(Root<Dept> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-=======
-		Specification<User> spec = new Specification<User>() {
 
-			@Override
-			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
 				
 				Path<Object> path = root.get("state");
 				return cb.equal(path.as(Integer.class), 1);
 			}
 		};
-<<<<<<< HEAD
+
 		List<Dept> deptList = deptService.find(spec);
 		
 		super.put("deptList", deptList);
-=======
-		List<User> userList = userService.find(spec);
-		
-		userList.remove(user);
-		super.put("userList", userList);
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
+
+
 		return "toupdate";
 	}
 	/**
@@ -199,15 +179,10 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 		
 		System.out.println(model);
 		User user = userService.get(model.getId());
-<<<<<<< HEAD
 		user.getUserinfo().setName(model.getUserinfo().getName());
 		user.setState(model.getState());
 		user.setDept(model.getDept());
-=======
 //		
-		user.setUserName(model.getUserName());
-		
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
 		userService.saveOrUpdate(user);
 		
 		return "alist";

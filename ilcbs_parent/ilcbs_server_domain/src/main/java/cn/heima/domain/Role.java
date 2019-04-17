@@ -22,10 +22,7 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicInsert(true)
 @DynamicUpdate(true)
 public class Role extends BaseEntity {
-<<<<<<< HEAD
-	
-=======
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
+
 	@Id
 	@Column(name="ROLE_ID")
 	@GeneratedValue(generator="system-uuid")
@@ -98,18 +95,11 @@ public class Role extends BaseEntity {
 	public void setModules(Set<Module> modules) {
 		this.modules = modules;
 	}
-<<<<<<< HEAD
-
 	@Override
 	public String toString() {
 		return "Role [id=" + id + ", name=" + name + ", remark=" + remark + "]";
 	}
 
-	
-
-	
-=======
->>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
     
 	
 	
