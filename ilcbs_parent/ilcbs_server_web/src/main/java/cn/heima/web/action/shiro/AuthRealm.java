@@ -1,6 +1,7 @@
 package cn.heima.web.action.shiro;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,11 +14,14 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 
+import cn.heima.domain.Module;
+import cn.heima.domain.Role;
 import cn.heima.domain.User;
 import cn.heima.service.UserService;
 
@@ -27,10 +31,23 @@ public class AuthRealm extends AuthorizingRealm{
 	private UserService userService;
 	
 	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection pCollection) {
 		// TODO Auto-generated method stub
 		System.out.println("调用了授权方法");
-		return null;
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		
+		User user = (User) pCollection.getPrimaryPrincipal();
+		
+		//获取用户及角色模块
+		Set<Role> roles = user.getRoles();
+		 
+		for (Role role : roles) {
+			Set<Module> modules = role.getModules();
+			for (Module module : modules) {
+				info.addStringPermission(module.getCpermission());
+			}
+		}
+		return info;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package cn.heima.web.action;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -57,13 +58,17 @@ public class LoginAction extends BaseAction {
 //			return SUCCESS;
 //		}
 //		return "login";
+//		User user1 = (User)session.get(SysConstant.CURRENT_USER_INFO);
+		
 		if(UtilFuns.isEmpty(username)) {
 			return "login";
 		}
 		
 		Subject subject = SecurityUtils.getSubject();
 		
-		UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+		Md5Hash md5Hash = new Md5Hash(password, username, 2);
+		
+		UsernamePasswordToken token = new UsernamePasswordToken(username,md5Hash.toString());
 		try {
 			subject.login(token);
 			User user = (User)subject.getPrincipal();

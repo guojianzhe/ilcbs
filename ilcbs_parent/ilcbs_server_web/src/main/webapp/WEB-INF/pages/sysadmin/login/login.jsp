@@ -1,5 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="/struts-tags" prefix="s" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -18,7 +19,7 @@
 	</head>
 	<body>
 		<div class="wrap">
-				
+			
 			<div class="subwrap">
 				<div class="login-box">
 					<h4>国际物流云商系统</h4>

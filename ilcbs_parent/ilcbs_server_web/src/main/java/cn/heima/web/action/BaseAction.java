@@ -37,6 +37,7 @@ public class BaseAction<T> extends ActionSupport implements RequestAware, Sessio
 	
 	protected Map<String, Object> request;
 	protected Map<String, Object> session;
+	
 	protected Map<String, Object> application;
 
 	public Map<String, Object> getRequest() {

@@ -24,11 +24,11 @@
 	<!-- 编写realm类 -->
 	<bean id="authRealm" class="cn.heima.web.action.shiro.AuthRealm">
 		<!-- 注入密码比较器对象 -->
-		<property name="credentialsMatcher" ref="passwordMatcher"/>
+		<!-- <property name="credentialsMatcher" ref="passwordMatcher"/> -->
 	</bean>
 	
 	<!-- 密码比较器类 -->
-	<bean id="passwordMatcher" class="cn.heima.web.action.shiro.PasswordMatcher"/>
+	<!-- <bean id="passwordMatcher" class="cn.heima.web.action.shiro.PasswordMatcher"/> -->
 	
 	<!-- Spring框架需要整合shiro安全框架 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -64,6 +64,7 @@
 				/ufiles/** = anon
 				/validator/** = anon
 				/resource/** = anon
+				/sysadmin/deptAction* = perms["系统管理"]
 				/** = authc   
 				/*.* = authc
             </value>

@@ -19,8 +19,6 @@ public class PasswordMatcher extends SimpleCredentialsMatcher{
 		
 		
 		Md5Hash md5Hash = new Md5Hash(password,uToken.getUsername(), 2);
-		
-		
 		System.out.println(md5Hash.toString());
 		//2.从info中获取密码(数据库中的用户密码)
 		String dbPassword = (String)info.getCredentials();
