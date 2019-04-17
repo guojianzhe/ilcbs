@@ -144,6 +144,17 @@ public class Userinfo extends BaseEntity {
 	public void setDegree(Integer degree) {
 		this.degree = degree;
 	}
+<<<<<<< HEAD
+	@Override
+	public String toString() {
+		return "Userinfo [id=" + id + ", name=" + name + ", manager=" + manager + ", joinDate=" + joinDate + ", salary="
+				+ salary + ", birthday=" + birthday + ", gender=" + gender + ", email=" + email + ", station=" + station
+				+ ", telephone=" + telephone + ", degree=" + degree + ", remark=" + remark + ", orderNo=" + orderNo
+				+ "]";
+	}
+	
+=======
+>>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
 	
 	
 }

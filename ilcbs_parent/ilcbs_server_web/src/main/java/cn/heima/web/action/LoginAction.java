@@ -12,6 +12,7 @@ import org.apache.struts2.convention.annotation.Results;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import cn.heima.domain.User;
 import cn.heima.utils.SysConstant;
 import cn.heima.utils.UtilFuns;
 
@@ -56,9 +57,24 @@ public class LoginAction extends BaseAction {
 //			return SUCCESS;
 //		}
 //		return "login";
+		if(UtilFuns.isEmpty(username)) {
+			return "login";
+		}
 		
+		Subject subject = SecurityUtils.getSubject();
 		
-		return SUCCESS;
+		UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+		try {
+			subject.login(token);
+			User user = (User)subject.getPrincipal();
+			session.put(SysConstant.CURRENT_USER_INFO, user);
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			super.put("errorInfo", "您的用户名密码错误");
+			return "login";
+		}
+			
 	}
 	
 	

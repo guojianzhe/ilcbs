@@ -109,6 +109,16 @@ public class User extends BaseEntity {
 	public void setUserinfo(Userinfo userinfo) {
 		this.userinfo = userinfo;
 	}
+<<<<<<< HEAD
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", roles=" + roles + ", userinfo=" + userinfo + ", userName=" + userName
+				+ ", password=" + password + ", state=" + state + "]";
+	}
+
+=======
 	
+>>>>>>> 651dbe2e76e9a8ab698735b03e8153a6d32a5f83
 	
 }

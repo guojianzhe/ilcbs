@@ -96,5 +96,5 @@
 	<context:component-scan base-package="cn.heima"></context:component-scan>
 		
 	<!--组装其它 配置文件-->
-	
+	<import resource="classpath:applicationContext-shiro.xml"/>
 </beans>

@@ -7,7 +7,7 @@
 	<title></title>
 	<script type="text/javascript" src="${ctx }/js/jquery-1.4.4.js"></script>
 	<script>
-	     /* function isOnlyChecked(){
+	      function isOnlyChecked(){
 	    	 var checkBoxArray = document.getElementsByName('id');
 				var count=0;
 				for(var index=0; index<checkBoxArray.length; index++) {
@@ -16,7 +16,7 @@
 					}	
 				}
 			//jquery
-			//var count = $("[input name='id']:checked").size();
+			var count = $("[input name='id']:checked").size();
 			if(count==1)
 				return true;
 			else
@@ -36,7 +36,7 @@
 	    	 }else{
 	    		 alert("请先选择一项并且只能选择一项，再进行操作！");
 	    	 }
-	     } */
+	     } 
 	</script>
 </head>
 
