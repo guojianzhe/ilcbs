@@ -1,7 +1,9 @@
 package cn.heima.web.action.sysadmin;
 
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -21,9 +23,10 @@ import com.opensymphony.xwork2.ModelDriven;
 
 
 import cn.heima.domain.Dept;
+import cn.heima.domain.Role;
 import cn.heima.domain.User;
 import cn.heima.service.DeptService;
-
+import cn.heima.service.RoleService;
 import cn.heima.service.UserService;
 import cn.heima.utils.Page;
 import cn.heima.web.action.BaseAction;
@@ -40,8 +43,19 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 	@Autowired
 	private DeptService deptService;
 
+	@Autowired
+	private RoleService roleService;
 	private User model = new User();
 	private Page page = new Page();
+	
+	private String[] roleIds;
+	
+	public String[] getRoleIds() {
+		return roleIds;
+	}
+	public void setRoleIds(String[] roleIds) {
+		this.roleIds = roleIds;
+	}
 	public Page getPage() {
 		return page;
 	}
@@ -54,6 +68,11 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 		
 		return model;
 	}
+	/**
+	 * 去列表页面
+	 * @return
+	 * @throws Exception
+	 */
 	@Action(value="userAction_list",results= {@Result(name="list",location="/WEB-INF/pages/sysadmin/user/jUserList.jsp")})
 	public String list() throws Exception{
 		
@@ -74,7 +93,6 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 		return "list";
 	}
 
-	
 	/**
 	 * 查看单个用户
 	 * @return
@@ -200,5 +218,50 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 		return "alist";
 	}
 	
+	/**
+	 * 跳转到用户角色分配页面
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="userAction_torole",results= {@Result(name="torole",location="/WEB-INF/pages/sysadmin/user/jUserRole.jsp")})
+	public String torole() throws Exception{
+		//用户角色列表
+		User user = userService.get(model.getId());
+		super.push(user);
+		//将角色全部查出来
+		List<Role> roleList = roleService.find(null);
+		//将角色列表压入栈顶
+		super.put("roleList", roleList);
+		//将用户所有的角色查询出来
+		Set<Role> roles = user.getRoles();
+		StringBuilder name = new StringBuilder();
+		for (Role role : roles) {
+			name.append(role.getName()+",");
+		}
+		super.put("roleStr", name.toString());
+		
+		return "torole";
+	}
 	
+	/**
+	 * 保存用户的角色
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="userAction_role")
+	public String role() throws Exception{
+		HashSet<Role> roles = new HashSet<Role>();
+		for (String rid : roleIds) {
+			roles.add(roleService.get(rid));
+		}
+		
+		User user = userService.get(model.getId());
+		
+		user.setRoles(roles);
+		
+		userService.saveOrUpdate(user);
+		
+		
+		return "alist";
+	}
 }

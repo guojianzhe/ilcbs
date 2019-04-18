@@ -13,6 +13,8 @@ import org.apache.struts2.convention.annotation.Results;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+
 import cn.heima.domain.User;
 import cn.heima.utils.SysConstant;
 import cn.heima.utils.UtilFuns;
@@ -58,9 +60,15 @@ public class LoginAction extends BaseAction {
 //			return SUCCESS;
 //		}
 //		return "login";
-//		User user1 = (User)session.get(SysConstant.CURRENT_USER_INFO);
-		
-		if(UtilFuns.isEmpty(username)) {
+		User user1 = (User)session.get(SysConstant.CURRENT_USER_INFO);
+		System.out.println(user1);
+//		if(UtilFuns.isEmpty(username)) {
+//			return "login";
+//		}else 
+		if(user1!=null){
+			System.out.println(user1);
+			return "success";
+		}else if(UtilFuns.isEmpty(username)){
 			return "login";
 		}
 		
