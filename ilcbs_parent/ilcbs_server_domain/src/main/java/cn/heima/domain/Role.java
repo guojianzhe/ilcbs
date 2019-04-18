@@ -27,7 +27,7 @@ public class Role extends BaseEntity {
 	@Column(name="ROLE_ID")
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid",strategy="uuid")
-	private String id;//角色id
+	private String id; //角色id
 	
 	@ManyToMany(mappedBy="roles")
 	private Set<User> users = new HashSet<User>(0);//角色与用户   多对多
