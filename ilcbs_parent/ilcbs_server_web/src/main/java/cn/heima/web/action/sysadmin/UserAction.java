@@ -113,14 +113,9 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 	 */
 	@Action(value="userAction_tocreate",results= {@Result(name="tocreate",location="/WEB-INF/pages/sysadmin/user/jUserCreate.jsp")})
 	public String tocreate() {
-		
-
 		Specification<User> userSpec = new Specification<User>() {
-			
 			@Override
 			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				
-
 				Path<Object> path = root.get("state");
 				return cb.equal(path.as(Integer.class), 1);
 			}
@@ -129,24 +124,14 @@ public class UserAction extends BaseAction implements ModelDriven<User>
 		List<User> userList = userService.find(userSpec);
 		super.put("userList", userList);
 		//deptList 该用户所在的部门
-		
 		Specification<Dept> deptSpec = new Specification<Dept>() {
-
 			@Override
 			public Predicate toPredicate(Root<Dept> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				
 				return cb.equal(root.get("state").as(Integer.class), 1);
 			}
-			
 		};
-		
 		List<Dept> deptList = deptService.find(deptSpec);
-		
 		super.put("deptList", deptList);
-
-		
-		
-
 		return "tocreate";
 	}
 	/**

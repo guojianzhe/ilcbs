@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import cn.heima.dao.UserDao;
 import cn.heima.domain.User;
 import cn.heima.service.UserService;
+import cn.heima.utils.MailUtil;
+import cn.heima.utils.SysConstant;
 import cn.heima.utils.UtilFuns;
 @Service("userService")
 public class UserServiceImpl implements UserService{
@@ -47,6 +49,25 @@ public class UserServiceImpl implements UserService{
 			
 			entity.setId(uid);
 			entity.getUserinfo().setId(uid);
+			
+			//准备用户md5密码
+			
+			Md5Hash md5Hash = new Md5Hash(SysConstant.DEFAULT_PASS, entity.getUserName(), 2);
+			
+			entity.setPassword(md5Hash.toString());
+			
+			String email = entity.getUserinfo().getEmail();
+			String subject = entity.getUserName()+":欢迎您!";
+			String content = "您的密码是:"+SysConstant.DEFAULT_PASS;
+			
+			
+			try {
+				MailUtil.sendMsg(email, subject, content);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+			
 			
 		}
 

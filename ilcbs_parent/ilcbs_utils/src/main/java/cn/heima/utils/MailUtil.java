@@ -25,7 +25,7 @@ public class MailUtil {
 		MimeMessage message = new MimeMessage(session);
 		
 		//4.设置消息的发送者
-		Address fromAddr = new InternetAddress("itheima14@163.com");
+		Address fromAddr = new InternetAddress("guojianzhe789@163.com");
 		message.setFrom(fromAddr);
 		
 		//5.设置消息的接收者
@@ -41,7 +41,7 @@ public class MailUtil {
 		//8.准备发送，得到火箭
 		Transport transport = session.getTransport("smtp");
 		//9.设置火箭的发射目标 
-		transport.connect("smtp.163.com", "itheima14@163.com", "iamsorry123");
+		transport.connect("smtp.163.com", "guojianzhe789@163.com", "gjz123456");
 		//10.发送
 		transport.sendMessage(message, message.getAllRecipients());
 		
