@@ -1,8 +1,11 @@
 package cn.heima.web.action.sysadmin;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.alibaba.fastjson.JSON;
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -182,15 +186,62 @@ public class RoleAction extends BaseAction implements ModelDriven<Role>
 		return "tomodule";
 		
 	}
-	
 	/**
-	 * ajax得到权限管理树
+	 * 新的ajax得到权限管理树
 	 * [{ id:11, pId:1, name:"随意勾选 1-1", open:true},{ id:111, pId:11, name:"随意勾选 1-1-1",checked:true}]
 	 * @return
 	 * @throws Exception
 	 */
 	@Action(value="roleAction_genzTreeNodes")
 	public String genzTreeNodes() throws Exception{
+		//1.根据id获取角色对象
+		Role role = roleService.get(model.getId());
+		//2.用户所拥有的所有模块
+		Set<Module> roleModules = role.getModules();
+		//3.查询所有的模块
+		
+		Specification<Module> spec = new Specification<Module>() {
+			@Override
+			public Predicate toPredicate(Root<Module> root, CriteriaQuery<?> arg1, CriteriaBuilder cb) {
+				// TODO Auto-generated method stub
+				return cb.equal(root.get("state").as(Integer.class), 1);
+			}
+		};
+		List<Module> modulesList = moduleService.find(spec);
+		
+		ArrayList<Map<String, Object>> list = new ArrayList<>();
+		for (Module module : modulesList) {
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("id", module.getId());
+			map.put("pId",module.getParentId());
+			map.put("name", module.getName());
+			
+			if(roleModules.contains(module)) {
+				map.put("checked", true);
+			}
+			list.add(map);
+//			[{ id:11, pId:1, name:"随意勾选 1-1", open:true},{ id:111, pId:11, name:"随意勾选 1-1-1",checked:true}]
+		}
+		
+		String json = JSON.toJSONString(list);
+		System.out.println(json);
+		
+		
+		HttpServletResponse response = ServletActionContext.getResponse();
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+		
+		return NONE;
+	}
+	
+	/**
+	 * 旧的ajax得到权限管理树
+	 * [{ id:11, pId:1, name:"随意勾选 1-1", open:true},{ id:111, pId:11, name:"随意勾选 1-1-1",checked:true}]
+	 * @return
+	 * @throws Exception
+	 */
+//	@Action(value="roleAction_genzTreeNodes")
+	public String oldgenzTreeNodes() throws Exception{
 		//1.根据id获取角色对象
 		Role role = roleService.get(model.getId());
 		//2.用户所拥有的所有模块
