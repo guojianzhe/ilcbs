@@ -33,7 +33,7 @@ public class Contract extends BaseEntity {
 	private Set<ContractProduct> contractProducts = new HashSet<ContractProduct>(0);
 	
 	@Column(name="OFFEROR")
-	private String offer;//收购方
+	private String offeror;//收购方
 	@Column(name="CONTRACT_NO")
 	private String contractNo;//编号
 	@Column(name="SIGNING_DATE")
@@ -77,11 +77,11 @@ public class Contract extends BaseEntity {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getOffer() {
-		return offer;
+	public String getOfferor() {
+		return offeror;
 	}
-	public void setOffer(String offer) {
-		this.offer = offer;
+	public void setOfferor(String offeror) {
+		this.offeror = offeror;
 	}
 	public String getContractNo() {
 		return contractNo;
@@ -193,7 +193,7 @@ public class Contract extends BaseEntity {
 	}
 	@Override
 	public String toString() {
-		return "Contract [id=" + id + ", offer=" + offer + ", contractNo=" + contractNo + ", signingDate=" + signingDate
+		return "Contract [id=" + id + ", offeror=" + offeror + ", contractNo=" + contractNo + ", signingDate=" + signingDate
 				+ ", inputBy=" + inputBy + ", checkBy=" + checkBy + ", inspector=" + inspector + ", totalAmount="
 				+ totalAmount + ", crequest=" + crequest + ", customName=" + customName + ", shipTime=" + shipTime
 				+ ", importNum=" + importNum + ", deliveryPeriod=" + deliveryPeriod + ", oldState=" + oldState

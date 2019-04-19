@@ -1,5 +1,8 @@
 package cn.heima.web.action.cargo;
 
+import java.awt.ContainerOrderFocusTraversalPolicy;
+import java.util.Arrays;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
@@ -103,16 +106,86 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract>{
 		
 		return "toupdate";
 	}
-
+	
+	/**
+	 * 购销合同修改并提交
+	 * @return
+	 * @throws Exception
+	 */
 	@Action(value="contractAction_update")
 	public String update() throws Exception {
 		
 		Contract contract = contractService.get(model.getId());
 		
-//		contract.set
+		contract.setCustomName(model.getCustomName());
+		contract.setPrintStyle(model.getPrintStyle());
+		contract.setContractNo(model.getContractNo());
+		contract.setOfferor(model.getOfferor());
+		contract.setInputBy(model.getInputBy());
+		contract.setCheckBy(model.getCheckBy());
+		contract.setInspector(model.getInspector());
+		contract.setSigningDate(model.getSigningDate());
+		contract.setImportNum(model.getImportNum());
+		contract.setShipTime(model.getShipTime());
+		contract.setTradeTerms(model.getTradeTerms());
+		contract.setDeliveryPeriod(model.getDeliveryPeriod());
+		contract.setCrequest(model.getCrequest());
+		contract.setRemark(model.getRemark());
 		
+		contractService.saveOrUpdate(contract);
 		
-		contractService.saveOrUpdate(model);
+		return "alist";
+	}
+	/**
+	 * 删除购销合同
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="contractAction_delete")
+	public String delete() throws Exception{
+		
+		System.out.println(model.getId());
+		
+		String[] ids = model.getId().split(", ");
+		
+		contractService.delete(ids);
+
+		return "alist";
+	}
+	
+	/**
+	 * 提交合同
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="contractAction_submit")
+	public String submit() throws Exception {
+		
+		String[] ids = model.getId().split(", ");
+		for (String id : ids) {
+			
+			Contract contract = contractService.get(id);
+			contract.setState(1);
+			contractService.saveOrUpdate(contract);
+		}
+		
+		return "alist";
+	}
+	
+	/**
+	 * 取消合同
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="contractAction_cancel")
+	public String cancel() throws Exception {
+		
+		String[] ids = model.getId().split(", ");
+		for (String id : ids) {
+			Contract contract = contractService.get(id);
+			contract.setState(0);
+			contractService.saveOrUpdate(contract);
+		}
 		
 		return "alist";
 	}

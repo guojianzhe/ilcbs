@@ -42,6 +42,7 @@ public class ContractServiceImpl implements ContractService{
 		
 		if(UtilFuns.isEmpty(entity.getId())) {
 			entity.setState(0);
+			entity.setTotalAmount(0.0);
 		}
 		contractDao.save(entity);
 	}
