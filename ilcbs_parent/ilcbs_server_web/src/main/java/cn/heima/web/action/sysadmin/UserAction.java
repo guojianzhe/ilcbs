@@ -17,11 +17,13 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.opensymphony.xwork2.ModelDriven;
 
-
+import cn.heima.dao.ContractDao;
+import cn.heima.domain.Contract;
 import cn.heima.domain.Dept;
 import cn.heima.domain.Role;
 import cn.heima.domain.User;
@@ -29,6 +31,7 @@ import cn.heima.service.DeptService;
 import cn.heima.service.RoleService;
 import cn.heima.service.UserService;
 import cn.heima.utils.Page;
+import cn.heima.utils.SysConstant;
 import cn.heima.web.action.BaseAction;
 
 @Namespace("/sysadmin")

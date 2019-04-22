@@ -13,9 +13,9 @@
 
 <body>
 <form name="icform" method="post">
-	<input type="text" name="id" value="${id}"/>
-	<input type="text" name="contractProduct.contract.id" value="${contractProduct.contract.id}"/>
-	<input type="text" name="contractProduct.id" value="${contractProduct.id}"/>
+	<input type="hidden" name="id" value="${id}"/>
+	<input type="hidden" name="contractProduct.contract.id" value="${contractProduct.contract.id}"/>
+	<input type="hidden" name="contractProduct.id" value="${contractProduct.id}"/>
 	
 	<input type="hidden" name="amount" value="${amount }"/>
 <div id="menubar">
@@ -47,7 +47,7 @@
 	            				listKey="id" listValue="factoryName" 
 	            				onchange="setFactoryName(this.options[this.selectedIndex].text);"
 	            				headerKey="" headerValue="--请选择--"/>
-	            	<input type="hidden" id="factoryName" name="factoryName" value=""/>
+	            	<input type="hidden" id="factoryName" name="factoryName" value="${factoryName}"/>
 	            </td>
 	            <td class="columnTitle">货号：</td>
 	            <td class="tableContentAuto"><input type="text" name="productNo" value="${productNo}"/>

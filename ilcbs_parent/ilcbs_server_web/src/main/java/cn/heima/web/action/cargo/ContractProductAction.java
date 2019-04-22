@@ -27,7 +27,7 @@ import cn.heima.utils.Page;
 import cn.heima.web.action.BaseAction;
 
 @Namespace("/cargo")
-
+@Result(name="tocreate",type="redirectAction",location="contractProductAction_tocreate?contract.id=${contract.id}")
 public class ContractProductAction extends BaseAction implements ModelDriven<ContractProduct>{
 
 	private ContractProduct model = new ContractProduct();
@@ -71,8 +71,6 @@ public class ContractProductAction extends BaseAction implements ModelDriven<Con
 				return cb.equal(root.get("ctype").as(String.class), "货物");
 			}
 		};
-		
-		
 		List<Factory> factoryList = factoryService.find(spec);
 		
 		super.put("factoryList", factoryList);
@@ -106,7 +104,7 @@ public class ContractProductAction extends BaseAction implements ModelDriven<Con
 		
 		contractProductService.saveOrUpdate(model);
 		
-		return "alist";
+		return "tocreate";
 	}
 	/**
 	 * 到购销合同的修改页面
@@ -114,6 +112,18 @@ public class ContractProductAction extends BaseAction implements ModelDriven<Con
 	 */
 	@Action(value="contractProductAction_toupdate",results= {@Result(name="toupdate",location="/WEB-INF/pages/cargo/contract/jContractProductUpdate.jsp")})
 	public String toupdate() throws Exception{
+		
+		Specification<Factory> spec = new Specification<Factory>() {
+
+			@Override
+			public Predicate toPredicate(Root<Factory> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				// TODO Auto-generated method stub
+				return cb.equal(root.get("ctype").as(String.class), "货物");
+			}
+		};
+		List<Factory> factoryList = factoryService.find(spec);
+		
+		super.put("factoryList", factoryList);
 		
 		ContractProduct contractProduct = contractProductService.get(model.getId());
 		super.push(contractProduct);
@@ -130,11 +140,24 @@ public class ContractProductAction extends BaseAction implements ModelDriven<Con
 	public String update() throws Exception {
 		
 		ContractProduct contractProduct = contractProductService.get(model.getId());
+		contractProduct.setFactory(model.getFactory());
+		contractProduct.setFactoryName(model.getFactoryName());
+		contractProduct.setProductNo(model.getProductNo());
+		contractProduct.setProductImage(model.getProductImage());
+		contractProduct.setCnumber(model.getCnumber());
+		contractProduct.setAmount(model.getAmount());
+		contractProduct.setPackingUnit(model.getPackingUnit());
+		contractProduct.setLoadingRate(model.getLoadingRate());
+		contractProduct.setBoxNum(model.getBoxNum());
+		contractProduct.setPrice(model.getPrice());
+		contractProduct.setOrderNo(model.getOrderNo());
+		contractProduct.setProductDesc(model.getProductDesc());
+		contractProduct.setProductRequest(model.getProductRequest());
 		
 		
 		contractProductService.saveOrUpdate(contractProduct);
 		
-		return "alist";
+		return "tocreate";
 	}
 	/**
 	 * 删除购销合同
@@ -144,13 +167,9 @@ public class ContractProductAction extends BaseAction implements ModelDriven<Con
 	@Action(value="contractProductAction_delete")
 	public String delete() throws Exception{
 		
-		System.out.println(model.getId());
-		
-		String[] ids = model.getId().split(", ");
-		
-		contractProductService.delete(ids);
+		contractProductService.deleteById(model.getId());
 
-		return "alist";
+		return "tocreate";
 	}
 	
 	/**
