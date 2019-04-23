@@ -113,4 +113,10 @@ public class ContractProductServiceImpl implements ContractProductService{
 		
 	}
 
+	@Override
+	public List<ContractProduct> findCpByShipTime(String shipTime) {
+		
+		return contractProductDao.findCpByShipTime(shipTime);
+	}
+
 }

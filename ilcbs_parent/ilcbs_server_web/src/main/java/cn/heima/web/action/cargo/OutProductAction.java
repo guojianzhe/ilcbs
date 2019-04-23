@@ -1,7 +1,11 @@
 package cn.heima.web.action.cargo;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,21 +17,28 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.convert.ReadingConverter;
 
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.opensymphony.xwork2.ModelDriven;
 
+import cn.heima.domain.ContractProduct;
+import cn.heima.service.ContractProductService;
 import cn.heima.utils.DownloadUtil;
+import cn.heima.utils.UtilFuns;
 import cn.heima.web.action.BaseAction;
 
 @Namespace("/cargo")
 public class OutProductAction extends BaseAction{
 
+	@Autowired
+	private ContractProductService contractProductService;
 	private String inputDate;
 	public String getInputDate() {
 		return inputDate;
@@ -43,15 +54,118 @@ public class OutProductAction extends BaseAction{
 		return "toedit";
 	}
 	
+
 	@Action(value="outProductAction_print")
-	public String print() throws IOException {
+	public String print() throws Exception {
+		
+		String path= "/make/xlsprint/tOUTPRODUCT.xlsx".replace("/",File.separator);
+		String filePath = ServletActionContext.getServletContext().getRealPath(path);
+		FileInputStream is = new FileInputStream(filePath);
+		Workbook book = new XSSFWorkbook(is);
+		Sheet sheet = book.getSheetAt(0);
+//		//设置列宽
+//		sheet.setColumnWidth(1, 10*256);
+//		sheet.setColumnWidth(2, 25*256);
+//		sheet.setColumnWidth(3, 10*256);
+//		sheet.setColumnWidth(4, 10*256);
+//		sheet.setColumnWidth(5, 10*256);
+//		sheet.setColumnWidth(6, 10*256);
+//		sheet.setColumnWidth(7, 10*256);
+//		sheet.setColumnWidth(8, 10*256);
+		
+		int rowindex = 0;
+		//大标题
+		Row bigTitleRow = sheet.getRow(rowindex++);
+		Cell bigCell = bigTitleRow.getCell(1);
+	
+		//大标题内容
+		
+		String titleStr = inputDate.replace("-0", "-").replace("-", "年");
+		bigCell.setCellValue(titleStr);
+		
+		
+		
+		//小标题
+		rowindex++;
+		//内容
+		//保存样式
+		CellStyle cs01 = sheet.getRow(rowindex).getCell(1).getCellStyle();
+		CellStyle cs02 = sheet.getRow(rowindex).getCell(2).getCellStyle();
+		CellStyle cs03 = sheet.getRow(rowindex).getCell(3).getCellStyle();
+		CellStyle cs04 = sheet.getRow(rowindex).getCell(4).getCellStyle();
+		CellStyle cs05 = sheet.getRow(rowindex).getCell(5).getCellStyle();
+		CellStyle cs06 = sheet.getRow(rowindex).getCell(6).getCellStyle();
+		CellStyle cs07 = sheet.getRow(rowindex).getCell(7).getCellStyle();
+		CellStyle cs08 = sheet.getRow(rowindex).getCell(8).getCellStyle();
+		
+		List<ContractProduct> shipTimeList = contractProductService.findCpByShipTime(inputDate);
+		for (ContractProduct cpProduct : shipTimeList) {
+			
+				Row littelRow = sheet.createRow(rowindex++);
+				littelRow.setHeightInPoints(26);
+				
+				
+				Cell littelCell = littelRow.createCell(1);
+				littelCell.setCellValue(cpProduct.getContract().getCustomName());
+				littelCell.setCellStyle(cs01);
+				
+				Cell littelCell2 = littelRow.createCell(2);
+				littelCell2.setCellValue(cpProduct.getContract().getContractNo());
+				littelCell2.setCellStyle(cs02);
+				
+				Cell littelCell3 = littelRow.createCell(3);
+				littelCell3.setCellValue(cpProduct.getProductNo());
+				littelCell3.setCellStyle(cs03);
+				
+				Cell littelCell4 = littelRow.createCell(4);
+				littelCell4.setCellValue(cpProduct.getCnumber());
+				littelCell4.setCellStyle(cs04);
+				
+				Cell littelCell5 = littelRow.createCell(5);
+				littelCell5.setCellValue(cpProduct.getFactoryName());
+				littelCell5.setCellStyle(cs05);
+				
+				Cell littelCell6 = littelRow.createCell(6);
+				littelCell6.setCellValue(UtilFuns.dateTimeFormat(cpProduct.getContract().getDeliveryPeriod()));
+				littelCell6.setCellStyle(cs06);
+				
+				Cell littelCell7 = littelRow.createCell(7);
+				littelCell7.setCellValue(UtilFuns.dateTimeFormat(cpProduct.getContract().getShipTime()));
+				littelCell7.setCellStyle(cs07);
+				
+				Cell littelCell8 = littelRow.createCell(8);
+				littelCell8.setCellValue(cpProduct.getContract().getTradeTerms());
+				littelCell8.setCellStyle(cs08);
+				
+		}
+		
+		
+		//写出excel
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		
+		HttpServletResponse response = ServletActionContext.getResponse();
+		
+		DownloadUtil download= new DownloadUtil();
+		
+		
+		book.write(os);
+		
+		download.download(os, response, titleStr+".xlsx");
+		
+		return NONE;
+	}
+	
+	
+	
+	@Action(value="outProductAction_oldPrint")
+	public String oldprint() throws Exception {
 		
 		Workbook book = new HSSFWorkbook();
 		Sheet sheet = book.createSheet();
 		//设置列宽
-		sheet.setColumnWidth(1, 25*256);
-		sheet.setColumnWidth(2, 10*256);
-		sheet.setColumnWidth(3, 25*256);
+		sheet.setColumnWidth(1, 10*256);
+		sheet.setColumnWidth(2, 25*256);
+		sheet.setColumnWidth(3, 10*256);
 		sheet.setColumnWidth(4, 10*256);
 		sheet.setColumnWidth(5, 10*256);
 		sheet.setColumnWidth(6, 10*256);
@@ -75,7 +189,7 @@ public class OutProductAction extends BaseAction{
 		
 		
 		//小标题
-		String[] smartStrs = {"客户","订单号","货号","数量","工厂","工厂交易","船期","贸易条款"};
+		String[] smartStrs = {"客户","订单号","货号","数量","工厂","工厂交期","船期","贸易条款"};
 		Row smartRow = sheet.createRow(rowindex++);
 		smartRow.setHeightInPoints(26);
 		for(int i=0; i<smartStrs.length;i++) {
@@ -83,10 +197,45 @@ public class OutProductAction extends BaseAction{
 			smartCell.setCellValue(smartStrs[i]);
 			smartCell.setCellStyle(title(book));
 		}
-		
-		
-		
 		//内容
+		List<ContractProduct> shipTimeList = contractProductService.findCpByShipTime(inputDate);
+		for (ContractProduct cpProduct : shipTimeList) {
+			
+				Row littelRow = sheet.createRow(rowindex++);
+				
+				Cell littelCell = littelRow.createCell(1);
+				littelCell.setCellValue(cpProduct.getContract().getCustomName());
+				littelCell.setCellStyle(text(book));
+				
+				Cell littelCell2 = littelRow.createCell(2);
+				littelCell2.setCellValue(cpProduct.getContract().getContractNo());
+				littelCell2.setCellStyle(text(book));
+				
+				Cell littelCell3 = littelRow.createCell(3);
+				littelCell3.setCellValue(cpProduct.getProductNo());
+				littelCell3.setCellStyle(text(book));
+				
+				Cell littelCell4 = littelRow.createCell(4);
+				littelCell4.setCellValue(cpProduct.getCnumber());
+				littelCell4.setCellStyle(text(book));
+				
+				Cell littelCell5 = littelRow.createCell(5);
+				littelCell5.setCellValue(cpProduct.getFactoryName());
+				littelCell5.setCellStyle(text(book));
+				
+				Cell littelCell6 = littelRow.createCell(6);
+				littelCell6.setCellValue(UtilFuns.dateTimeFormat(cpProduct.getContract().getDeliveryPeriod()));
+				littelCell6.setCellStyle(text(book));
+				
+				Cell littelCell7 = littelRow.createCell(7);
+				littelCell7.setCellValue(UtilFuns.dateTimeFormat(cpProduct.getContract().getShipTime()));
+				littelCell7.setCellStyle(text(book));
+				
+				Cell littelCell8 = littelRow.createCell(8);
+				littelCell8.setCellValue(cpProduct.getContract().getTradeTerms());
+				littelCell8.setCellStyle(text(book));
+				
+		}
 		
 		
 		//写出excel
