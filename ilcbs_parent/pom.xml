@@ -41,6 +41,7 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.1</version>
 		</dependency>
+		<!-- 定时任务 -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>

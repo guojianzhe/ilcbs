@@ -16,8 +16,8 @@
 	<!-- 1.dataSource-->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="oracle.jdbc.driver.OracleDriver" />
-		<!-- <property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.1.19:1521:orcl" /> -->
-		<property name="jdbcUrl" value="jdbc:oracle:thin:localhost:1521:orcl" />
+		<property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.1.19:1521:orcl" />
+		<!-- <property name="jdbcUrl" value="jdbc:oracle:thin:localhost:1521:orcl" /> -->
 		<property name="user" value="heima2971" />
 		<property name="password" value="heima2971" />
 	</bean>
@@ -99,4 +99,6 @@
 		
 	<!--组装其它 配置文件-->
 	<import resource="classpath:applicationContext-shiro.xml"/>
+	<import resource="classpath:applicationContext_job.xml"/>
+	
 </beans>

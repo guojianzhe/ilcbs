@@ -10,9 +10,36 @@
 
 <script language="JavaScript">
     $(document).ready(function(){
-		${mRecordData}
+		/* ${mRecordData} */
 		//发送ajax请求-------------返回json------------后面就去组织数据（调用函数）
+		/* $.get("exportAction_getTabledoData?id=${id}",function(value){
+			
+			console.log(value.length)
+			  for (var i = 0; i < value.length; i++) {
+				addTRRecord('mRecordTable', value[i].id, value[i].productNo, value[i].cnumber, value[i].grossWeight, value[i].netWeight, value[i].sizeLength, value[i].sizeWidth, value[i].sizeHeight, value[i].exPrice, value[i].tax)
+			}  
+			
+		},'json') 
+		*/
+		
+		$.ajax({
+			url:'exportAction_getTabledoData?id=${id}',
+			type:'get',
+			dataType:'json',
+			success:function(value){
+				for (var i = 0; i < value.length; i++) {
+					addTRRecord('mRecordTable', value[i].id, value[i].productNo, value[i].cnumber, value[i].grossWeight, value[i].netWeight, value[i].sizeLength, value[i].sizeWidth, value[i].sizeHeight, value[i].exPrice, value[i].tax)
+				}  
+			}
+			
+			
+		})
+		
+		
+		
+		
 		//当进入更新页面时-----------直接获取服务器返回的串   [{"id":"1","productNo":""},{"id":"1","productNo":""},{"id":"1","productNo":""}]
+		
 		
     });
     

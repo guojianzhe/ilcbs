@@ -200,6 +200,13 @@ public class ExportProduct implements Serializable{
 	}
 	public void setExtEproducts(Set<ExtEproduct> extEproducts) {
 		this.extEproducts = extEproducts;
+	}
+	@Override
+	public String toString() {
+		return "ExportProduct [id=" + id + ", productNo=" + productNo + ", packingUnit=" + packingUnit + ", cnumber="
+				+ cnumber + ", boxNum=" + boxNum + ", grossWeight=" + grossWeight + ", netWeight=" + netWeight
+				+ ", sizeLength=" + sizeLength + ", sizeWidth=" + sizeWidth + ", sizeHeight=" + sizeHeight
+				+ ", exPrice=" + exPrice + ", price=" + price + ", tax=" + tax + ", orderNo=" + orderNo + "]";
 	}	
 	
 	
