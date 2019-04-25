@@ -4,6 +4,7 @@ package cn.heima.web.action.cargo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.opensymphony.xwork2.ModelDriven;
 
 import cn.heima.domain.Contract;
@@ -31,6 +34,7 @@ import cn.heima.service.ExportService;
 import cn.heima.utils.Page;
 import cn.heima.utils.UtilFuns;
 import cn.heima.web.action.BaseAction;
+import cn.itcast.export.webservice.IEpService;
 
 @Namespace("/cargo")
 @Result(name="alist",type="redirectAction",location="exportAction_list")
@@ -61,6 +65,8 @@ public class ExportAction extends BaseAction implements ModelDriven<Export> {
 	@Autowired
 	private ExportProductService exportProductService;
 	
+	@Autowired
+	private IEpService epService;
 	/**
 	 * 合同管理内购销合同列表
 	 * @return
@@ -73,7 +79,7 @@ public class ExportAction extends BaseAction implements ModelDriven<Export> {
 
 			@Override
 			public Predicate toPredicate(Root<Contract> root, CriteriaQuery<?> arg1, CriteriaBuilder cb) {
-				// TODO Auto-generated method stub
+				
 				return cb.equal(root.get("state").as(Integer.class), 1);
 			}
 		};
@@ -271,6 +277,66 @@ public class ExportAction extends BaseAction implements ModelDriven<Export> {
 		
 		return "alist";
 	}
+	@Action(value="exportAction_exportE")
+	public String exportE() throws Exception {
+		
+		Export export = exportService.get(model.getId());
+		
+		
+		
+		
+		return "alist";
+	}
+	
+	@Action(value="exportAction_wsexportE")
+	public String wsexportE() throws Exception {
+		
+		Export export = exportService.get(model.getId());
+		
+		HashMap map = new HashMap<>();
+		map.put("exportId", export.getId());
+		map.put("boxNum",export.getBoxNums());
+		map.put("destinationPort", export.getDestinationPort());
+		map.put("customerContract", export.getCustomerContract());
+		
+		ArrayList list = new ArrayList<>();
+		Set<ExportProduct> exportProducts = export.getExportProducts();
+		for (ExportProduct exportProduct : exportProducts) {
+			HashMap epMap = new HashMap<>();
+			epMap.put("exportProductId", exportProduct.getId());
+			epMap.put("cnumber", exportProduct.getCnumber());
+			epMap.put("price", exportProduct.getPrice());
+			list.add(epMap);
+		}
+		map.put("products", list);
+		
+		String jsonString = JSON.toJSONString(map);
+		System.out.println(jsonString);
+		String exportE = epService.exportE(jsonString);
+		
+		HashMap returnMap = JSON.parseObject(exportE,HashMap.class);
+		
+		
+		//根据返回内容更新本地报运单
+		Export export2 = exportService.get(returnMap.get("exportId").toString());
+		export2.setState(Integer.parseInt(returnMap.get("state").toString()));
+		export2.setRemark(returnMap.get("remark").toString());
+		
+		exportService.saveOrUpdate(export2);
+		
+		List<HashMap> parseArray = JSON.parseArray(returnMap.get("products").toString(),HashMap.class);
+		
+		for (HashMap hashMap : parseArray) {
+			
+			ExportProduct exportProduct = exportProductService.get(hashMap.get("exportProductId").toString());
+			exportProduct.setTax(Double.parseDouble(hashMap.get("tax").toString()));
+			exportProductService.saveOrUpdate(exportProduct);
+		}
+		
+		
+		return "alist";
+	}
+	
 	
 	private String[] mr_id;
 	private String[] mr_changed;

@@ -99,6 +99,7 @@
 		
 	<!--组装其它 配置文件-->
 	<import resource="classpath:applicationContext-shiro.xml"/>
-	<import resource="classpath:applicationContext_job.xml"/>
+	<import resource="classpath:applicationContext-ws-client.xml"/>
+	<!-- <import resource="classpath:applicationContext_job.xml"/> -->
 	
 </beans>
