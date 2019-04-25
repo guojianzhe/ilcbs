@@ -384,7 +384,11 @@
 		</dependency> 
 		
 		<!-- cxfrs风格坐标begin -->
-		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+			<version>3.0.1</version>
+		</dependency>
 		<!-- 客户端 -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>

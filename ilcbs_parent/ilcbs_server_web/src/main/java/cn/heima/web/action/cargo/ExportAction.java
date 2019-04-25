@@ -3,6 +3,7 @@ package cn.heima.web.action.cargo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,10 +13,12 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,6 +31,10 @@ import com.opensymphony.xwork2.ModelDriven;
 import cn.heima.domain.Contract;
 import cn.heima.domain.Export;
 import cn.heima.domain.ExportProduct;
+import cn.heima.export.vo.ExportProductResult;
+import cn.heima.export.vo.ExportProductVo;
+import cn.heima.export.vo.ExportResult;
+import cn.heima.export.vo.ExportVo;
 import cn.heima.service.ContractService;
 import cn.heima.service.ExportProductService;
 import cn.heima.service.ExportService;
@@ -282,14 +289,53 @@ public class ExportAction extends BaseAction implements ModelDriven<Export> {
 		
 		Export export = exportService.get(model.getId());
 		
+		WebClient client = WebClient.create("http://localhost:8080/jk_export/ws/export/user");
+		
+		ExportVo exportVo = new ExportVo();
+		
+		BeanUtils.copyProperties(export, exportVo);
+		exportVo.setExportId(export.getId());
 		
 		
+		Set<ExportProduct> exportProducts = export.getExportProducts();
+		HashSet<ExportProductVo> productVos = new HashSet<>();
+		for (ExportProduct ep : exportProducts) {
+			ExportProductVo productVo = new ExportProductVo();
+			BeanUtils.copyProperties(ep, productVo);
+			productVo.setExportProductId(ep.getId());
+			productVo.setExportId(export.getId());
+			productVos.add(productVo);
+		}
+		
+		exportVo.setProducts(productVos);
+		
+		client.post(exportVo);
+		
+		WebClient client2 = WebClient.create("http://localhost:8080/jk_export/ws/export/user/"+exportVo.getId());
+		
+		ExportResult exportResult = client2.get(ExportResult.class);
+		Export export2 = exportService.get(exportResult.getExportId());
+		export2.setState(exportResult.getState());
+		export2.setRemark(exportResult.getRemark());
+		
+		exportService.saveOrUpdate(export2);
+		
+		Set<ExportProductResult> products = exportResult.getProducts();
+		
+		for (ExportProductResult epResult : products) {
+			ExportProduct exportProduct = exportProductService.get(epResult.getExportProductId());
+			
+			exportProduct.setTax(epResult.getTax());
+			
+			exportProductService.saveOrUpdate(exportProduct);
+			
+		}
 		
 		return "alist";
 	}
 	
-	@Action(value="exportAction_wsexportE")
-	public String wsexportE() throws Exception {
+	@Action(value="exportAction_wsExportE")
+	public String wsExportE() throws Exception {
 		
 		Export export = exportService.get(model.getId());
 		
