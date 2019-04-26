@@ -10,7 +10,6 @@ import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletResponse;
@@ -24,10 +23,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.alibaba.fastjson.JSON;
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.opensymphony.xwork2.ModelDriven;
 
-import cn.heima.domain.Dept;
 import cn.heima.domain.Module;
 import cn.heima.domain.Role;
 import cn.heima.exception.SysException;
@@ -35,12 +32,17 @@ import cn.heima.service.DeptService;
 import cn.heima.service.ModuleService;
 import cn.heima.service.RoleService;
 import cn.heima.utils.Page;
+import cn.heima.utils.UtilFuns;
 import cn.heima.web.action.BaseAction;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 @Namespace("/sysadmin")
 @Result(name="alist",type="redirectAction",location="roleAction_list")
 public class RoleAction extends BaseAction implements ModelDriven<Role>
 {
+	@Autowired
+	private JedisPool pool;
 	
 	@Autowired
 	private RoleService roleService;
@@ -196,40 +198,50 @@ public class RoleAction extends BaseAction implements ModelDriven<Role>
 	public String genzTreeNodes() throws Exception{
 		//1.根据id获取角色对象
 		Role role = roleService.get(model.getId());
-		//2.用户所拥有的所有模块
-		Set<Module> roleModules = role.getModules();
-		//3.查询所有的模块
 		
-		Specification<Module> spec = new Specification<Module>() {
-			@Override
-			public Predicate toPredicate(Root<Module> root, CriteriaQuery<?> arg1, CriteriaBuilder cb) {
-				// TODO Auto-generated method stub
-				return cb.equal(root.get("state").as(Integer.class), 1);
-			}
-		};
-		List<Module> modulesList = moduleService.find(spec);
+		Jedis jedis = pool.getResource();
 		
-		ArrayList<Map<String, Object>> list = new ArrayList<>();
-		for (Module module : modulesList) {
-			HashMap<String, Object> map = new HashMap<>();
-			map.put("id", module.getId());
-			map.put("pId",module.getParentId());
-			map.put("name", module.getName());
+		String returnStr = jedis.get("genzTreeNodes_"+role.getId());
+		
+		if(UtilFuns.isEmpty(returnStr)) {
+			//2.用户所拥有的所有模块
+			Set<Module> roleModules = role.getModules();
+			//3.查询所有的模块
 			
-			if(roleModules.contains(module)) {
-				map.put("checked", true);
+			Specification<Module> spec = new Specification<Module>() {
+				@Override
+				public Predicate toPredicate(Root<Module> root, CriteriaQuery<?> arg1, CriteriaBuilder cb) {
+					// TODO Auto-generated method stub
+					return cb.equal(root.get("state").as(Integer.class), 1);
+				}
+			};
+			List<Module> modulesList = moduleService.find(spec);
+			
+			ArrayList<Map<String, Object>> list = new ArrayList<>();
+			for (Module module : modulesList) {
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("id", module.getId());
+				map.put("pId",module.getParentId());
+				map.put("name", module.getName());
+				
+				if(roleModules.contains(module)) {
+					map.put("checked", true);
+				}
+				list.add(map);
+//				[{ id:11, pId:1, name:"随意勾选 1-1", open:true},{ id:111, pId:11, name:"随意勾选 1-1-1",checked:true}]
 			}
-			list.add(map);
-//			[{ id:11, pId:1, name:"随意勾选 1-1", open:true},{ id:111, pId:11, name:"随意勾选 1-1-1",checked:true}]
+			returnStr = JSON.toJSONString(list);
+			
+			jedis.set("genzTreeNodes_"+role.getId(), returnStr);
+			System.out.println("数据库中获取");
+			System.out.println(returnStr);
+		}else {
+			System.out.println(returnStr);
+			System.out.println("从jedis中获取");
 		}
-		
-		String json = JSON.toJSONString(list);
-		System.out.println(json);
-		
-		
 		HttpServletResponse response = ServletActionContext.getResponse();
 		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);
+		response.getWriter().write(returnStr);
 		
 		return NONE;
 	}
@@ -306,6 +318,10 @@ public class RoleAction extends BaseAction implements ModelDriven<Role>
 		role.setModules(modules);
 		//4.保存到role数据库
 		roleService.saveOrUpdate(role);
+		
+		
+		Jedis jedis = pool.getResource();
+		jedis.del("genzTreeNodes_"+role.getId());
 		
 		return "alist";
 	}

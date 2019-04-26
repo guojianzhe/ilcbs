@@ -447,5 +447,10 @@
   	<module>ilcbs_client_web</module>
   	<module>ilcbs_jms</module>
   	<module>ilcbs_server_client</module>
+  	<module>ilcbs_cache1</module>
+  	<module>ilcbs_client_w</module>
+  	<module>ilcbs_client_ser</module>
+  	<module>ilcbs_client_domain1</module>
+  	<module>ilcbs_client_dao1</module>
   </modules>
 </project>
