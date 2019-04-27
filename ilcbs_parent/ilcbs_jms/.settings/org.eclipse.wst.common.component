@@ -4,7 +4,13 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <property name="java-output-path" value="/ilcbs_jms/target/classes"/>
+        <dependent-module archiveName="ilcbs_utils-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ilcbs_utils/ilcbs_utils">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ilcbs_cache-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ilcbs_cache/ilcbs_cache">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="heima297"/>
+        <property name="java-output-path" value="/ilcbs_jms/target/classes"/>
     </wb-module>
 </project-modules>

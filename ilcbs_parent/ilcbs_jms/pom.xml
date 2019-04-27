@@ -8,4 +8,16 @@
   <artifactId>ilcbs_jms</artifactId>
   <packaging>war</packaging>
   
+  <dependencies>
+  	<dependency>
+  		<groupId>cn.heima</groupId>
+  		<artifactId>ilcbs_utils</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>cn.heima</groupId>
+  		<artifactId>ilcbs_cache</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

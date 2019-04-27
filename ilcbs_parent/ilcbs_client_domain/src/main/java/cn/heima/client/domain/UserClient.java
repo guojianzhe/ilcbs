@@ -113,6 +113,11 @@ public class UserClient implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	@Override
+	public String toString() {
+		return "UserClient [id=" + id + ", userName=" + userName + ", password=" + password + ", email=" + email
+				+ ", telephone=" + telephone + ", degree=" + degree + ", state=" + state + "]";
+	}
 
 	
 }

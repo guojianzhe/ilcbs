@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import cn.heima.client.dao.UserClientDao;
 import cn.heima.client.domain.UserClient;
+import cn.heima.utils.UtilFuns;
 
 @Service
 public class UserClientServiceImpl implements UserClientService {
@@ -19,6 +20,11 @@ public class UserClientServiceImpl implements UserClientService {
 	}
 	
 	public void saveOrUpdate(UserClient entity) {
+		if(UtilFuns.isEmpty(entity.getId())) {
+			entity.setState(0);
+		}
+		
+		
 		userClientDao.save(entity);
 	}
 	

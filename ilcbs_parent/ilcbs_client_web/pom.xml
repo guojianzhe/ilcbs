@@ -7,12 +7,12 @@
   </parent>
   <artifactId>ilcbs_client_web</artifactId>
   <packaging>war</packaging>
+  
   <dependencies>
   	<dependency>
   		<groupId>cn.heima</groupId>
   		<artifactId>ilcbs_client_service</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
-  		<type>war</type>
   	</dependency>
   </dependencies>
 </project>

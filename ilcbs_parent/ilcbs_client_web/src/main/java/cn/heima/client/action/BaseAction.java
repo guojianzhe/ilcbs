@@ -24,12 +24,12 @@ import com.opensymphony.xwork2.ActionSupport;
 @Scope("prototype")
 public class BaseAction extends ActionSupport implements RequestAware, SessionAware, ApplicationAware{
 	
-	
 	private static Logger log = Logger.getLogger(BaseAction.class);
+	
+	
 	
 	private static final long serialVersionUID = 1L;
 
-	
 	protected Map<String, Object> request;
 	protected Map<String, Object> session;
 	protected Map<String, Object> application;
